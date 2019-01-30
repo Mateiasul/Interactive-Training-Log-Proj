@@ -1,0 +1,39 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/activity_main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    >
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/back1">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="16dp"
+            android:text="Select Training Type"
+            android:textColor="#ffffff"
+            android:textSize="17sp"
+            android:textStyle="bold" />
+
+    </LinearLayout>
+
+    <com.webianks.library.scroll_choice.ScrollChoice
+        android:id="@+id/scroll_choice"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:scroll_atmospheric="true"
+        app:scroll_background_color="@color/browser_actions_bg_grey"
+        app:scroll_indicator="true"
+        app:scroll_indicator_color="@color/back1"
+        app:scroll_item_align="center"
+        app:scroll_item_text_color="@color/browser_actions_text_color"
+        app:scroll_selected_item_background="@color/scroll"
+        app:scroll_selected_item_text_color="@color/browser_actions_text_color" />
+
+</LinearLayout>

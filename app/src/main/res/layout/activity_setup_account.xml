@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".SetupAccount">
+
+
+    <include
+        android:id="@+id/toolbarSetup"
+        layout="@layout/toolbar_menu"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/buttonAccountSettup"
+        android:layout_width="323dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="44dp"
+        android:text="@string/AccountSettupButton"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.513"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <EditText
+        android:id="@+id/editText_firstName"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginRight="15dp"
+        android:ems="10"
+        android:hint="@string/AccountSetupName"
+        android:inputType="textPersonName"
+        android:textAllCaps="true"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.413"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editText_secondName" />
+
+
+    <View
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:layout_marginStart="17dp"
+        android:layout_marginEnd="17dp"
+        android:background="@android:color/darker_gray"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/squadName" />
+
+    <View
+        android:id="@+id/view"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:layout_marginStart="17dp"
+        android:layout_marginEnd="17dp"
+        android:background="@android:color/darker_gray"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textViewDOBPicker" />
+
+    <TextView
+        android:id="@+id/squadName"
+        android:layout_width="wrap_content"
+        android:layout_height="45dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:ems="10"
+        android:hint="@string/setupSquadName"
+        android:paddingLeft="10dp"
+        android:paddingTop="5dp"
+        android:textAllCaps="true"
+        android:textColor="@color/browser_actions_text_color"
+        android:textSize="18sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textViewDOBPicker" />
+
+    <EditText
+        android:id="@+id/editText_Weight"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="15dp"
+        android:ems="10"
+        android:hint="@string/AccountSetupWeight"
+        android:inputType="number"
+        android:textAllCaps="true"
+        app:layout_constraintEnd_toStartOf="@+id/WeightSpinner"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintHorizontal_chainStyle="spread_inside"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editText_Height" />
+
+    <EditText
+        android:id="@+id/editText_Height"
+        android:layout_width="209dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:ems="10"
+        android:hint="@string/AccountSetupHeight"
+        android:inputType="number"
+        android:textAllCaps="true"
+        app:layout_constraintEnd_toStartOf="@+id/HeightSpinner"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintHorizontal_chainStyle="spread_inside"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editText_firstName" />
+
+    <EditText
+        android:id="@+id/editText_secondName"
+        android:layout_width="0dp"
+        android:layout_height="48dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="88dp"
+        android:layout_marginEnd="8dp"
+        android:ems="10"
+        android:hint="@string/AccountSetupSurname"
+        android:inputType="textPersonName"
+        android:textAllCaps="true"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Spinner
+        android:id="@+id/HeightSpinner"
+        android:layout_width="wrap_content"
+        android:layout_height="45dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/editText_Height"
+        app:layout_constraintTop_toBottomOf="@+id/editText_firstName" />
+
+    <Spinner
+        android:id="@+id/WeightSpinner"
+        android:layout_width="wrap_content"
+        android:layout_height="45dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/editText_Weight"
+        app:layout_constraintTop_toBottomOf="@+id/HeightSpinner" />
+
+    <TextView
+        android:id="@+id/textViewDOBPicker"
+        android:layout_width="214dp"
+        android:layout_height="45dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:drawableRight="@drawable/outline_date_range_black_24dp"
+        android:hint="@string/AccountSettupDOB"
+        android:paddingLeft="10dp"
+        android:paddingTop="5dp"
+        android:textColorHint="@color/com_facebook_button_background_color_focused_disabled"
+        android:textSize="18dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editText_Weight" />
+
+</android.support.constraint.ConstraintLayout>

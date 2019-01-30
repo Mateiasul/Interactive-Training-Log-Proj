@@ -1,0 +1,57 @@
+<resources>
+    <string name="app_name">FireApp</string>
+    <string name="title_textView">Salgo</string>
+    <string name="SignupButton_Text">Sign up</string>
+    <string name="TextEdit_Password">Password..</string>
+    <string name="ExitText_Email">Email..</string>
+    <string name="EditText_ConfirmPass">Confirm Password...</string>
+    <string name="LogInButton">LogIn</string>
+    <string name="TextViewtitle">Salgo</string>
+    <string name="TextViewSignupDesc">Don\'t have an account yet?</string>
+    <string name="TextViewSignUpDesc">Already have an account?</string>
+    <string name="LogoutButonDesc">Logout</string>
+    <string name="AccountSettupButton">Save Account Settings</string>
+    <string name="AccountSetupName">First Name</string>
+    <string name="AccountSettupDesc">Account settings</string>
+    <string name="AccountSetupSurname">Last Name</string>
+    <string name="AccountSettupDOB">Date of Birth</string>
+    <string name="AccountSettupDoBformat">DD/MM/YYYY</string>
+    <string name="AccountSetupHeight">Height</string>
+    <string name="AccountSetupWeight">Weight</string>
+    <string name="BottomNavDashboard">Dashbord</string>
+    <string name="BottomNavChallange">Challanges</string>
+    <string name="BottomNavAdd">Add</string>
+    <string name="BottomNavAccount">Account</string>
+    <string name="facebook_app_id">486110665216617</string>
+    <string name="fb_login_protocol_scheme">fb486110665216617</string>
+
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="EditText_AddTitle">Training title</string>
+    <string name="Log_training_date">Date</string>
+    <string name="timePickerDialog">Time</string>
+    <string name="TypePickerDialog">Type</string>
+    <string name="spinner_title_weight">Weight</string>
+    <string name="spinner_title_height">Weight</string>
+    <string name="setupSquadName">Squad Name</string>
+    <string name="textViewDuration">Duration</string>
+    <string name="EffortLevel">Level of Effort</string>
+
+
+    <string-array name="Weights">
+        <item>lb</item>
+        <item>kg</item>
+    </string-array>
+    <string-array name="Heights">
+        <item>cm</item>
+        <item>inch</item>
+    </string-array>
+    <string name="title_activity_new_tabbed_dash">NewTabbedDashActivity</string>
+    <string name="tab_text_1">Tab 1</string>
+    <string name="tab_text_2">Tab 2</string>
+    <string name="tab_text_3">Tab 3</string>
+    <string name="action_settings">Settings</string>
+    <string name="section_format">Hello World from section: %1$d</string>
+    <string name="title_activity_new_add_workout">NewAddWorkoutActivity</string>
+
+    AccountSettupDesc
+</resources>
