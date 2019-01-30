@@ -106,7 +106,7 @@ public class AddFragment extends Fragment implements DialogDatePicker.DatePicker
         duration.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                workoutDurationDialogFragment.show(getFragmentManager(), "fireeeeee");
+                workoutDurationDialogFragment.show(getFragmentManager(), "fireeeeeee");
             }
         });
 
