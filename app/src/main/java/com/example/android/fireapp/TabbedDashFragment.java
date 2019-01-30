@@ -38,7 +38,7 @@ public class TabbedDashFragment extends Fragment implements ViewPager.OnPageChan
         mBottomNav = navBar.findViewById(R.id.main_nav_bar);
         mBottomNav.setVisibility(View.GONE);
         FAB_addActivity = v.findViewById(R.id.fab_add_activity);
-       FAB_addActivity.setOnClickListener(new View.OnClickListener() {
+        FAB_addActivity.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
      /*           AddFragment fragment = new AddFragment();

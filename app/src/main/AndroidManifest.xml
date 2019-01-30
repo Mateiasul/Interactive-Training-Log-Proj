@@ -45,7 +45,8 @@
                 <data android:scheme="@string/fb_login_protocol_scheme" />
             </intent-filter>
         </activity>
-        <activity android:name=".AddWorkoutActivity"></activity>
+        <activity android:name=".AddWorkoutActivity" />
+        <activity android:name=".testTab.Main2ActivitydialogTest"></activity>
     </application>
 
 </manifest>

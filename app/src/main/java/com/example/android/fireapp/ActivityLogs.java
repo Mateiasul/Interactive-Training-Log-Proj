@@ -11,6 +11,16 @@ public class ActivityLogs {
     private Date activityDate;
     private String activityTime;
     private String activityTitle;
+
+    public String getActivityDuration() {
+        return activityDuration;
+    }
+
+    public void setActivityDuration(String activityDuration) {
+        this.activityDuration = activityDuration;
+    }
+
+    private String activityDuration;
     private int activityEffortLevel;
 
     public String getActivityTitle() {
@@ -58,12 +68,13 @@ public class ActivityLogs {
 
 
     public ActivityLogs(String activityTitle, String activityType,
-                        Date activityDate, String activityTime,
+                        Date activityDate, String activityTime,String activityDuration,
                         int activityEffortLevel) {
         this.activityTitle = activityTitle;
         this.activityType = activityType;
         this.activityDate = activityDate;
         this.activityTime = activityTime;
+        this.activityDuration = activityDuration;
         this.activityEffortLevel = activityEffortLevel;
     }
 }

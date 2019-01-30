@@ -14,6 +14,7 @@ import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.FrameLayout;
 
+import com.example.android.fireapp.testTab.Main2ActivitydialogTest;
 import com.facebook.login.LoginManager;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -26,11 +27,13 @@ public class BottomNav extends AppCompatActivity {
 
     private BottomNavigationView mBottomNav;
     private FrameLayout mFrameLayout;
-    private DashFragment dashFragment;
+    //private DashFragment dashFragment;
     private ChallangesFragment challangesFragment;
     private AccountFragment accountFragment;
     private TabbedDashFragment tabbedDashFragment;
+/*
     private AddFragment addFragment;
+*/
     private FirebaseFirestore firebaseFirestore;
     private String userId;
     private Button logoutButton;
@@ -79,12 +82,14 @@ public class BottomNav extends AppCompatActivity {
         setContentView(R.layout.activity_bottom_nav);
         mFrameLayout = findViewById(R.id.frame_layout);
         mBottomNav = findViewById(R.id.main_nav_bar);
-        dashFragment = new DashFragment();
+        //dashFragment = new DashFragment();
         challangesFragment = new ChallangesFragment();
         tabbedDashFragment = new TabbedDashFragment();
 
         accountFragment = new AccountFragment();
+/*
         addFragment = new AddFragment();
+*/
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle("Mateiasul's App");
@@ -112,9 +117,9 @@ public class BottomNav extends AppCompatActivity {
                         selectFragment(challangesFragment,"Challenges");
                         return  true;
 
-                    case R.id.nav_add:
+          /*          case R.id.nav_add:
                         selectFragment(addFragment,"Log Training");
-                        return  true;
+                        return  true;*/
 
                     case R.id.nav_account:
                         selectFragment(accountFragment,"Account Setup");
@@ -196,9 +201,9 @@ public class BottomNav extends AppCompatActivity {
         startActivity(loginIntent);
         finish();
     }
-
+    //send
     private void toAccountSetupActivity() {
-        Intent setupIntent = new Intent(BottomNav.this, AddWorkoutActivity.class);
+        Intent setupIntent = new Intent(BottomNav.this, SetupAccount.class);
         startActivity(setupIntent);
     }
 }

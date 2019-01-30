@@ -1,4 +1,4 @@
-package com.example.android.fireapp;
+package com.example.android.fireapp.DialogFragments;
 
 import android.app.AlertDialog;
 import android.app.Dialog;

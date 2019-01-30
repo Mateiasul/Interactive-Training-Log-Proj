@@ -1,3 +1,4 @@
+/*
 package com.example.android.fireapp;
 
 
@@ -36,9 +37,11 @@ import java.util.List;
 import java.util.Map;
 
 
+*/
 /**
  * A simple {@link Fragment} subclass.
- */
+ *//*
+
 //Todo cross fade transition between fragments
 public class DashFragment extends Fragment {
 
@@ -85,6 +88,7 @@ public class DashFragment extends Fragment {
                                 for (QueryDocumentSnapshot document : task.getResult()) {
                                     Log.d("EVS", document.getId() + " => " + document.getData());
                                     String title = document.get("Training Title").toString();
+                                    //TODO change date with duration move date next to title
                                     String date = document.get("Training Date").toString();
                                     String time = document.get("Training Time").toString();
                                     String type = document.get("Training Type").toString();
@@ -148,7 +152,8 @@ public class DashFragment extends Fragment {
         }
     }
 
-  /*  public void onAddField(View v)
+  */
+/*  public void onAddField(View v)
    {
         Context context = getActivity();
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -162,5 +167,7 @@ public class DashFragment extends Fragment {
         button.setText("button name");
         dashboardLayout.addView(button);
     }
-*/
+*//*
+
 }
+*/

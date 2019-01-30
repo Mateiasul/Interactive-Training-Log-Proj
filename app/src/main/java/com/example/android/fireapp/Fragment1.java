@@ -14,7 +14,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.example.android.fireapp.ActivityLogs;
-import com.example.android.fireapp.DashFragment;
+//import com.example.android.fireapp.DashFragment;
 import com.example.android.fireapp.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -82,6 +82,7 @@ public class Fragment1 extends Fragment {
                                     Date date = (Date) document.get("Training Date");
                                     String time = document.get("Training Time").toString();
                                     String type = document.get("Training Type").toString();
+                                    String duration = document.get("Training Duration").toString();
                                     //requires casting due to FireStore cloud storing the value as Number
                                     //casting to Long  - which extends number
                                     int effortLevel = ((Long) document.get("Effort Level")).intValue();
@@ -89,7 +90,8 @@ public class Fragment1 extends Fragment {
 
                                     DateFormat df = new SimpleDateFormat("MM-dd-yyyy");
 
-                                    ActivityLogs log = new ActivityLogs(title, type, date, time, effortLevel);
+                                    ActivityLogs log = new ActivityLogs(title, type, date,
+                                                                 time,duration, effortLevel);
                                     logs.add(log);
                                 }
                                 Fragment1.CustomAdapter customAdapter = new Fragment1.CustomAdapter();
@@ -135,13 +137,15 @@ public class Fragment1 extends Fragment {
             view = getLayoutInflater().inflate(R.layout.dashbord_activities_layout,null);
             TextView titleTV = view.findViewById(R.id.challangesTitle);
             TextView typeTV = view.findViewById(R.id.challangesType);
-            TextView timeTV = view.findViewById(R.id.challangesTime);
+            TextView timeTV = view.findViewById(R.id.trainingActivityTime);
             TextView dateTV = view.findViewById(R.id.challangesDate);
+            TextView durationTV = view.findViewById(R.id.trainingActivityDuration);
 
             titleTV.setText(logs.get(i).getActivityTitle());
             timeTV.setText(logs.get(i).getActivityTime());
             dateTV.setText(logs.get(i).getActivityDate());
             typeTV.setText(logs.get(i).getActivityType());
+            durationTV.setText(logs.get(i).getActivityDuration());
 
             return view;
         }
