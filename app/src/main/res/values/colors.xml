@@ -12,6 +12,9 @@
     <color name="Red">#f44242</color>
     <color name="Green">#41f465</color>
     <color name="Yellow">#ffff00</color>
+    <color name="Blue">#4286f4</color>
+    <color name="Brown">#5d5e42</color>
+    <color name="Pink">#d6a7a7</color>
     <color name="TabsColor">#ebfff8</color>
 
 </resources>

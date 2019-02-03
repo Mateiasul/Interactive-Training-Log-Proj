@@ -8,6 +8,7 @@ public class UserGraphEntries {
     private int skiingWorkoutsAmount;
     private int walkingWorkoutsAmount;
     private int hikingWorkoutsAmount;
+    private int runningWorkoutsAmount;
 
 
     public UserGraphEntries(String userName, int gymWorkoutsAmount, int sailingWorkoutsAmount, int skiingWorkoutsAmount, int walkingWorkoutsAmount, int hikingWorkoutsAmount, int runningWorkoutsAmount) {
@@ -77,7 +78,6 @@ public class UserGraphEntries {
         this.runningWorkoutsAmount = runningWorkoutsAmount;
     }
 
-    private int runningWorkoutsAmount;
 
 
 }

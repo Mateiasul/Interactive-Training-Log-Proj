@@ -46,7 +46,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".AddWorkoutActivity" />
-        <activity android:name=".testTab.Main2ActivitydialogTest"></activity>
+        <activity android:name=".testTab.Main2Activity_testListVIew"></activity>
     </application>
 
 </manifest>

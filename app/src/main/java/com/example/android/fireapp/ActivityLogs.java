@@ -11,6 +11,26 @@ public class ActivityLogs {
     private Date activityDate;
     private String activityTime;
     private String activityTitle;
+    private String docReference;
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    private String userName;
+
+    public String getDocReference() {
+        return docReference;
+    }
+
+    public void setDocReference(String docReference) {
+        this.docReference = docReference;
+    }
+
 
     public String getActivityDuration() {
         return activityDuration;
@@ -45,6 +65,10 @@ public class ActivityLogs {
         return date_str;
     }
 
+    public Date getActivityDateFormat() {
+        return  activityDate;
+    }
+
     public void setActivityDate(Date activityDate) {
         this.activityDate = activityDate;
     }
@@ -69,12 +93,14 @@ public class ActivityLogs {
 
     public ActivityLogs(String activityTitle, String activityType,
                         Date activityDate, String activityTime,String activityDuration,
-                        int activityEffortLevel) {
+                        int activityEffortLevel, String docReference, String userName) {
         this.activityTitle = activityTitle;
         this.activityType = activityType;
         this.activityDate = activityDate;
         this.activityTime = activityTime;
         this.activityDuration = activityDuration;
         this.activityEffortLevel = activityEffortLevel;
+        this.docReference = docReference;
+        this.userName = userName;
     }
 }

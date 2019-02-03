@@ -19,11 +19,13 @@ import com.github.mikephil.charting.data.BarEntry;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.webianks.library.scroll_choice.ScrollChoice;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -41,6 +43,7 @@ public class Fragment2 extends Fragment {
     private ArrayList<String> userNames;
     private ArrayList<DocumentReference> userDocsReference;
     private ArrayList<String> eventTypes;
+    private ArrayList<String> squadNames;
     private  ArrayList<BarEntry> barEntries;
     private int athleteNumber;
     private String currentUserSquad;
@@ -77,6 +80,12 @@ public class Fragment2 extends Fragment {
                 {
                     //store squad
                     currentUserSquad = task.getResult().getString("SquadName");
+                    getEvents(new FirestoreCallback() {
+                        @Override
+                        public void onCallback(Map<String, UserGraphEntries> userTrainingMap) {
+                            prepareData();
+                        }
+                    });
                 }
                 else
                 {
@@ -90,12 +99,7 @@ public class Fragment2 extends Fragment {
         //need to be rechecked
         //call get events, when get events finished
         //Callback made so prepare data can be used
-        getEvents(new FirestoreCallback() {
-            @Override
-            public void onCallback(Map<String, UserGraphEntries> userTrainingMap) {
-                prepareData();
-            }
-        });
+
 
             return v;
     }
@@ -109,9 +113,9 @@ public class Fragment2 extends Fragment {
     private void getEvents(final FirestoreCallback callback)
     {
 
-        //TODO replace hardcoded squad value
+        //TODO replace hardcoded squad value - done
         mFirebaseFirestore.collection("Events")
-                .whereEqualTo("User Squad", "420 Squad")
+                .whereEqualTo("User Squad", currentUserSquad)
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
@@ -143,6 +147,10 @@ public class Fragment2 extends Fragment {
                 });
     }
 
+
+
+
+
     private void checkAndUpdateWorkoutType(QueryDocumentSnapshot document, UserGraphEntries userGraphEntrie) {
         if(document.get("Training Type").equals("Gym"))
         {
@@ -156,35 +164,38 @@ public class Fragment2 extends Fragment {
         {
             userGraphEntrie.setRunningWorkoutsAmount(userGraphEntrie.getRunningWorkoutsAmount() + 1);
         }
+        if(document.get("Training Type").equals("Walking"))
+        {
+            userGraphEntrie.setWalkingWorkoutsAmount(userGraphEntrie.getWalkingWorkoutsAmount() + 1);
+        }
+        else if(document.get("Training Type").equals("Hiking"))
+        {
+            userGraphEntrie.setHikingWorkoutsAmount(userGraphEntrie.getHikingWorkoutsAmount() + 1);
+        }
+        else if(document.get("Training Type").equals("Skiing"))
+        {
+            userGraphEntrie.setSkiingWorkoutsAmount(userGraphEntrie.getSkiingWorkoutsAmount() + 1);
+        }
     }
 
+    private void getSquads()
+    {
+        CollectionReference collectionReference = mFirebaseFirestore.collection("Squad Names");
 
-    private void retrieveUsers(final FirestoreCallback callback) {
-        mFirebaseFirestore.collection("Users")
-                .whereEqualTo("SquadName", "420 Squad")
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            //if completed and successful
-                            for (QueryDocumentSnapshot document : task.getResult()) {
-                                //for each document/user in the collection
-                                //count the users
-                                usersPerSquad++;
-                                //store their last names - to be used as graph labels
-                                String userName = document.get("LastName").toString();
-                                userNames.add(userName);
-                                //for each retrieved user, get the reference for their events collection
-                                DocumentReference documentReference = document.getReference();
-                                userDocsReference.add(documentReference);
-                            }
-                        }
-                        else {
-                            Log.d("USER", "Error getting documents: ", task.getException());
-                        }
+        collectionReference.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful())
+                {
+                    for (QueryDocumentSnapshot document : task.getResult())
+                    {
+                        squadNames.add(document.getString("name").toString());
                     }
-                });
+
+                }
+
+            }
+        });
     }
 
     public void prepareData()
@@ -198,7 +209,13 @@ public class Fragment2 extends Fragment {
             int gymAmount = userGraphEntrie.getGymWorkoutsAmount();
             int sailingAmount = userGraphEntrie.getSailingWorkoutsAmount();
             int runningAmount = userGraphEntrie.getRunningWorkoutsAmount();
-            barEntries.add(new BarEntry(entryNumber,new float[]{gymAmount,sailingAmount,runningAmount}));
+            int walkingAmount = userGraphEntrie.getWalkingWorkoutsAmount();
+            int skiingAmount = userGraphEntrie.getSkiingWorkoutsAmount();
+            int hikingAmount = userGraphEntrie.getHikingWorkoutsAmount();
+
+            barEntries.add(new BarEntry(entryNumber,new float[]{gymAmount,sailingAmount,runningAmount
+                                                                ,walkingAmount,skiingAmount,
+                                                                hikingAmount}));
             entryNumber++;
 
             // do what you have to do here
@@ -228,8 +245,9 @@ public class Fragment2 extends Fragment {
         //set colors and their labels
         //TODO crashes if tapped repeatedly
         //barDataSet.setColors(new int[]{ContextCompat.getColor(getActivity(), R.color.colorPrimary), ContextCompat.getColor(getActivity(), R.color.back1), ContextCompat.getColor(getActivity(), R.color.com_facebook_blue)});
-        barDataSet.setColors(new int[] { R.color.Red, R.color.Green, R.color.Yellow},getActivity());
-        barDataSet.setStackLabels(new String[] {"Gym","Sail","Run"});
+        barDataSet.setColors(new int[] { R.color.Red, R.color.Green, R.color.Yellow,
+                                R.color.Brown, R.color.Pink, R.color.Blue},getActivity());
+        barDataSet.setStackLabels(new String[] {"Gym","Sail","Run","Walk","Ski","Hike"});
         barChart.setData(barData);
 
         //get the set of keys from the hashmap and convert them to an array

@@ -1,3 +1,4 @@
+/*
 package com.example.android.fireapp;
 
 import android.content.Context;
@@ -112,3 +113,4 @@ public class MainTabActivity  extends AppCompatActivity implements ViewPager.OnP
         viewPager.addOnPageChangeListener(this);
     }
 }
+*/

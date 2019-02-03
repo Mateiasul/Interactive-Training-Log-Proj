@@ -14,7 +14,7 @@ import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.FrameLayout;
 
-import com.example.android.fireapp.testTab.Main2ActivitydialogTest;
+import com.example.android.fireapp.testTab.redundant.BlankFragment;
 import com.facebook.login.LoginManager;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -31,7 +31,10 @@ public class BottomNav extends AppCompatActivity {
     private ChallangesFragment challangesFragment;
     private AccountFragment accountFragment;
     private TabbedDashFragment tabbedDashFragment;
-/*
+    //to be deleted
+    private BlankFragment blankFragment;
+
+    /*
     private AddFragment addFragment;
 */
     private FirebaseFirestore firebaseFirestore;
@@ -87,7 +90,9 @@ public class BottomNav extends AppCompatActivity {
         tabbedDashFragment = new TabbedDashFragment();
 
         accountFragment = new AccountFragment();
-/*
+        blankFragment = new BlankFragment();
+
+        /*
         addFragment = new AddFragment();
 */
         Toolbar toolbar = findViewById(R.id.toolbar);
