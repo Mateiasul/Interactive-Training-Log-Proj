@@ -34,7 +34,7 @@ public class EffortAlertDialogPicker extends DialogFragment {
                     public void onClick(DialogInterface dialog, int id) {
                         //if ok is clicked retrieve the value and pass it to the listener
                         int value = numberPicker.getValue();
-                        listener.applyNumber(value);
+                        listener.onEffortSelected(value);
 
                     }
                 })
@@ -67,6 +67,6 @@ public class EffortAlertDialogPicker extends DialogFragment {
     public interface EffortPickerDialogListener
     {
         //method to be implemented by activities that implement the interface
-        void applyNumber(int value);
+        void onEffortSelected(int value);
     }
 }

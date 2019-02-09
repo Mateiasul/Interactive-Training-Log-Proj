@@ -42,7 +42,7 @@ public class WorkoutDurationDialog extends DialogFragment {
                         int hourValue = numberPickerHour.getValue();
                         int minValue  = numberPickerMin.getValue();
                         int secValue  = numberPickerSec.getValue();
-                        durationDialogListener.applyNumbers(hourValue,minValue,secValue);
+                        durationDialogListener.onDurationSelected(hourValue,minValue,secValue);
                     }
                 })
                 .setNegativeButton(" Cancel", new DialogInterface.OnClickListener() {
@@ -68,6 +68,6 @@ public class WorkoutDurationDialog extends DialogFragment {
 
     public interface DurationDialogListener
     {
-        void applyNumbers(int hour,int minutes,int seconds);
+        void onDurationSelected(int hour, int minutes, int seconds);
     }
 }

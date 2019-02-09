@@ -289,14 +289,14 @@ public class AddWorkoutActivity extends AppCompatActivity implements DialogDateP
 
     //retrieve values from effort dialog
     @Override
-    public void applyNumber(int value) {
+    public void onEffortSelected(int value) {
         effortLevelTV.setText(Integer.toString(value));
     }
 
 
     //retrieve values from duration dialog
     @Override
-    public void applyNumbers(int hour, int minutes, int seconds) {
+    public void onDurationSelected(int hour, int minutes, int seconds) {
         String time = Integer.toString(hour) + "h  " + Integer.toString(minutes) + "m";
         durationtV.setText(time);
     }

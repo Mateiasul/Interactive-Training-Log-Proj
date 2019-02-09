@@ -53,6 +53,9 @@
     <string name="section_format">Hello World from section: %1$d</string>
     <string name="title_activity_new_add_workout">NewAddWorkoutActivity</string>
     <string name="trainingDurationTV">Duration</string>
+    <string name="EditWorkoutUsername">Username</string>
+    <string name="edit_workout">Edit workout</string>
+    <string name="delete_wokout">delete</string>
 
     AccountSettupDesc
 </resources>

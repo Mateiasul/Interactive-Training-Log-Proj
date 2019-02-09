@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".AddWorkoutActivity">
+
+    <EditText
+        android:id="@+id/editTextTrainingTitle"
+        android:layout_width="299dp"
+        android:layout_height="47dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="84dp"
+        android:autofillHints=""
+        android:ems="10"
+        android:hint="@string/EditText_AddTitle"
+        android:inputType="textPersonName"
+        android:paddingLeft="10dp"
+        android:textColor="@color/browser_actions_text_color"
+        android:textColorHint="@color/com_facebook_button_background_color_focused_disabled"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textViewDatepicker"
+        android:layout_width="159dp"
+        android:layout_height="38dp"
+        android:layout_marginStart="16dp"
+        android:drawableRight="@drawable/outline_date_range_black_24dp"
+        android:hint="@string/Log_training_date"
+        android:inputType="date"
+        android:paddingLeft="10dp"
+        android:paddingTop="5dp"
+        android:textColor="@color/browser_actions_text_color"
+        android:textColorHint="@color/com_facebook_button_background_color_focused_disabled"
+        android:textSize="20sp"
+        app:layout_constraintBaseline_toBaselineOf="@+id/textViewTrainingTypePicker"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/textViewTimePicker"
+        android:layout_width="161dp"
+        android:layout_height="38dp"
+        android:layout_marginTop="44dp"
+        android:layout_marginEnd="60dp"
+        android:drawableRight="@drawable/outline_watch_later_black_24dp"
+        android:hint="@string/timePickerDialog"
+        android:paddingLeft="10dp"
+        android:paddingTop="5dp"
+        android:textColor="@color/browser_actions_text_color"
+        android:textColorHint="@color/com_facebook_button_background_color_focused_disabled"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textViewTrainingTypePicker" />
+
+    <TextView
+        android:id="@+id/textViewTrainingTypePicker"
+        android:layout_width="156dp"
+        android:layout_height="38dp"
+        android:layout_marginTop="44dp"
+        android:layout_marginEnd="68dp"
+        android:drawableRight="@drawable/baseline_fitness_center_black_24dp"
+        android:hint="@string/TypePickerDialog"
+        android:paddingLeft="10dp"
+        android:paddingTop="5dp"
+        android:textColor="@color/browser_actions_text_color"
+        android:textColorHint="@color/com_facebook_button_background_color_focused_disabled"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editTextTrainingTitle" />
+
+    <TextView
+        android:id="@+id/durationSelectorTV"
+        android:layout_width="158dp"
+        android:layout_height="38dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="44dp"
+        android:hint="@string/textViewDuration"
+        android:paddingLeft="10dp"
+        android:paddingTop="5dp"
+        android:textSize="20sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/effortSelectorTV" />
+
+    <include layout="@layout/edit_workout_toolbar_menu"
+        android:id="@+id/toolbar"
+        />
+
+    <TextView
+        android:id="@+id/effortSelectorTV"
+        android:layout_width="158dp"
+        android:layout_height="38dp"
+        android:layout_marginStart="16dp"
+        android:hint="@string/EffortLevel"
+        android:paddingLeft="10dp"
+        android:paddingTop="5dp"
+        android:textColor="@color/browser_actions_text_color"
+        android:textSize="20sp"
+        app:layout_constraintBaseline_toBaselineOf="@+id/textViewTimePicker"
+        app:layout_constraintHorizontal_chainStyle="spread_inside"
+        app:layout_constraintStart_toStartOf="parent" />
+
+</android.support.constraint.ConstraintLayout>

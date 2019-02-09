@@ -1,5 +1,6 @@
 package com.example.android.fireapp;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -40,6 +41,7 @@ public class Fragment1 extends Fragment {
     private FirebaseAuth mFireBaseAuth;
     private FirebaseFirestore mFirebaseFirestore;
     private View v;
+    private String userID;
 
     private ListView listView;
     private List<ActivityLogs> logs;
@@ -47,7 +49,6 @@ public class Fragment1 extends Fragment {
     private ActionMode mActionMode;
     private int selectedItem = -1;
     private CustomAdapter customAdapter;
-    private String userID;
     private String docID;
 
     @Nullable
@@ -75,6 +76,13 @@ public class Fragment1 extends Fragment {
                 //start action mode
                 mActionMode = getActivity().startActionMode(mActionModeCallback1);
                 return true;
+            }
+        });
+
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                goToDetailedWorkoutActivity(i);
             }
         });
 
@@ -109,6 +117,9 @@ public class Fragment1 extends Fragment {
                                                                  time,duration, effortLevel,docRef,userName);
                                     //map of all the logged activities
                                     logs.add(log);
+                                    //try and retrieve doc id from EVENTS earlier so it can be passed on
+                                    //might need refactoring, not the best implementation - copied code
+                                    getEventsDocID1(log);
                                 }
                                 //set the adapter for the list view which basically acts as a bridge
                                 //between the data and the view
@@ -123,6 +134,14 @@ public class Fragment1 extends Fragment {
         return v;
         //return fragments view
 
+    }
+
+    private void goToDetailedWorkoutActivity(int position) {
+        ActivityLogs activityLog = (ActivityLogs)customAdapter.getItem(position);
+        Intent intent = new Intent(getActivity(), DetailedWorkoutActivity.class);
+        intent.putExtra("workoutDocRef",activityLog.getDocReference());
+        intent.putExtra("workoutEventsDocRef",docID);
+        startActivity(intent);
     }
 
 
@@ -241,6 +260,29 @@ public class Fragment1 extends Fragment {
                 }
                 //when query is completed and id retrieved call the callback method
                 callback.onCallback(docID);
+            }
+        });
+
+    }
+
+    private void getEventsDocID1(ActivityLogs activityLog) {
+        //gets the selected workout and the callback variable
+        //compares the selected workout's date with all the dates from EVENTS and retrieve matchs
+        mFirebaseFirestore.collection("Events")
+                .whereEqualTo("Training Date",activityLog.getActivityDateFormat())
+                .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful())
+                {
+                    //go through all the retrieved docs and store ID
+                    //should only be one as date is accurate to the second
+                    for(QueryDocumentSnapshot document : task.getResult())
+                    {
+                        docID = document.getId();
+                    }
+
+                }
             }
         });
 
