@@ -106,7 +106,8 @@ public class Fragment1 extends Fragment {
                                     String time = document.get("Training Time").toString();
                                     String type = document.get("Training Type").toString();
                                     String duration = document.get("Training Duration").toString();
-                                    String userName = document.get("Training Duration").toString();
+                                    String userName = document.get("User Name").toString();
+                                    String userSquad = document.get("User Squad").toString();
                                     String docRef = document.getId();
                                     //requires casting due to FireStore cloud storing the value as Number
                                     //casting to Long  - which extends number
@@ -114,7 +115,7 @@ public class Fragment1 extends Fragment {
                                     DateFormat df = new SimpleDateFormat("MM-dd-yyyy");
 
                                     ActivityLogs log = new ActivityLogs(title, type, date,
-                                                                 time,duration, effortLevel,docRef,userName);
+                                                                 time,duration, effortLevel,docRef,userName,userSquad);
                                     //map of all the logged activities
                                     logs.add(log);
                                     //try and retrieve doc id from EVENTS earlier so it can be passed on

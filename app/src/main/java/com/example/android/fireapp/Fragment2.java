@@ -12,7 +12,6 @@ import android.widget.Toast;
 
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.components.XAxis;
-import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
@@ -25,12 +24,10 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
-import com.webianks.library.scroll_choice.ScrollChoice;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
-import java.util.Hashtable;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -39,15 +36,18 @@ public class Fragment2 extends Fragment {
     private FirebaseFirestore mFirebaseFirestore;
     private View v;
     private BarChart barChart;
-    private int usersPerSquad;
+    private BarChart allEventsBarChart;
     private ArrayList<String> userNames;
     private ArrayList<DocumentReference> userDocsReference;
     private ArrayList<String> eventTypes;
     private ArrayList<String> squadNames;
     private  ArrayList<BarEntry> barEntries;
-    private int athleteNumber;
+    private  ArrayList<BarEntry> allEventsBarEntries;
+
     private String currentUserSquad;
     private  Map<String, UserGraphEntries> userTrainingMap;
+    private  Map<String, UserGraphEntries> squadWorkoutMap;
+    private ArrayList<ActivityLogs> workouts;
 
 
     @Nullable
@@ -55,15 +55,17 @@ public class Fragment2 extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         userTrainingMap  = new HashMap<>();
+        squadWorkoutMap  = new HashMap<>();
         userNames = new ArrayList<>();
         barEntries = new ArrayList<>();
+        allEventsBarEntries = new ArrayList<>();
         userDocsReference = new ArrayList<>();
-        usersPerSquad = 0;
-        athleteNumber = 0;
         mFireBaseAuth = mFireBaseAuth.getInstance();
         mFirebaseFirestore = FirebaseFirestore.getInstance();
         v = inflater.inflate(R.layout.fragment_challanges, container, false);
         barChart = v.findViewById(R.id.chart1);
+        allEventsBarChart = v.findViewById(R.id.chart2);
+
         barChart.setMaxVisibleValueCount(40);
         barChart.setDrawValueAboveBar(true);
         barChart.setPinchZoom(false);
@@ -80,10 +82,22 @@ public class Fragment2 extends Fragment {
                 {
                     //store squad
                     currentUserSquad = task.getResult().getString("SquadName");
-                    getEvents(new FirestoreCallback() {
+
+                    //using a callback retrieve all the user sided base events, base on its squad
+                    getUserEvents(new FirestoreCallback() {
                         @Override
                         public void onCallback(Map<String, UserGraphEntries> userTrainingMap) {
-                            prepareData();
+                            if (!userTrainingMap.isEmpty())
+                            {
+                                //once the getUserEvents is completed, if there is data
+                                //ready the data to be displayed in the bard chart
+                                prepareData();
+                            }
+                            else
+                            {
+                                //if there's no data - don t display the empty barchart
+                                barChart.setVisibility(View.GONE);
+                            }
                         }
                     });
                 }
@@ -96,6 +110,12 @@ public class Fragment2 extends Fragment {
             }
         });
 
+
+        //retrieve all the existing events from the database
+        getAllEvents();
+/*
+        prepareAllEventsData();
+*/
         //need to be rechecked
         //call get events, when get events finished
         //Callback made so prepare data can be used
@@ -104,13 +124,59 @@ public class Fragment2 extends Fragment {
             return v;
     }
 
+    private void getAllEvents() {
+        mFirebaseFirestore.collection("Events")
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            //if completed and successful
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                String userSquad = document.get("User Squad").toString();
+                                //for each retrieved event store data based on each squad
+                                if(squadWorkoutMap.containsKey(userSquad))
+                                {
+                                    //if the map already contains an entry for a specific squad
+                                    //update the existing data accordingly
+                                    UserGraphEntries userGraphEntrie = squadWorkoutMap.get(userSquad);
+                                    checkAndUpdateWorkoutType(document, userGraphEntrie);
+                                    squadWorkoutMap.put(userSquad,userGraphEntrie);
+
+                                }
+                                else{
+                                    //if there's no data yet for a squad, create a new entry
+                                    //initialise everything to 0, and then update it accordingly
+                                    userNames.add(userSquad);
+                                    UserGraphEntries userGraphEntrie = new UserGraphEntries(userSquad,0,0,0,0,0,0);
+                                    checkAndUpdateWorkoutType(document, userGraphEntrie);
+                                    squadWorkoutMap.put(userSquad,userGraphEntrie);
+                                }
+                            }
+                            //once the map is created prepare the map data to be displayed in the bar chart
+                            prepareAllEventsData();
+                        }
+                        else {
+                            Log.d("USER", "Error getting documents: ", task.getException());
+                        }
+                    }
+                });
+    }
+
     private interface FirestoreCallback
     {
         void onCallback(Map<String, UserGraphEntries> userTrainingMap);
     }
 
 
-    private void getEvents(final FirestoreCallback callback)
+/*    private interface SecondGraphCallback
+    {
+        void onCallback(Map<String, UserGraphEntries> userTrainingMap);
+    }*/
+
+
+
+    private void getUserEvents(final FirestoreCallback callback)
     {
 
         //TODO replace hardcoded squad value - done
@@ -202,7 +268,7 @@ public class Fragment2 extends Fragment {
     {
 
         int entryNumber = 0;
-
+        barEntries.clear();
         //for each entry in the map created, create a bar entry that contains the training details
         for(Map.Entry<String, UserGraphEntries> entry : userTrainingMap.entrySet()) {
             UserGraphEntries userGraphEntrie = entry.getValue();
@@ -221,10 +287,35 @@ public class Fragment2 extends Fragment {
             // do what you have to do here
             // In your case, another loop.
         }
-
-
         //TODO some sort of safety necessary for multi-threading , might need revising
             setData(barEntries);
+
+    }
+
+
+    public void prepareAllEventsData()
+    {
+
+        int entryNumber = 0;
+        allEventsBarEntries.clear();
+        //for each entry in the map created, create a bar entry that contains the training details
+        for(Map.Entry<String, UserGraphEntries> entry : squadWorkoutMap.entrySet()) {
+            UserGraphEntries userGraphEntrie = entry.getValue();
+            int gymAmount = userGraphEntrie.getGymWorkoutsAmount();
+            int sailingAmount = userGraphEntrie.getSailingWorkoutsAmount();
+            int runningAmount = userGraphEntrie.getRunningWorkoutsAmount();
+            int walkingAmount = userGraphEntrie.getWalkingWorkoutsAmount();
+            int skiingAmount = userGraphEntrie.getSkiingWorkoutsAmount();
+            int hikingAmount = userGraphEntrie.getHikingWorkoutsAmount();
+
+            allEventsBarEntries.add(new BarEntry(entryNumber,new float[]{gymAmount,sailingAmount,runningAmount
+                    ,walkingAmount,skiingAmount,
+                    hikingAmount}));
+            entryNumber++;
+            
+        }
+        //once the bar entries all create it, pass them to be displayed
+        setAllEventsData(allEventsBarEntries);
 
     }
 
@@ -264,5 +355,42 @@ public class Fragment2 extends Fragment {
         //TODO maybe add hours value on the side? / minutes?
         //redraw graph every time?
         barChart.invalidate();
+    }
+
+    public void setAllEventsData(ArrayList<BarEntry> barChartEntries) {
+        allEventsBarChart = v.findViewById(R.id.chart2);
+        allEventsBarChart.setMaxVisibleValueCount(40);
+        allEventsBarChart.setDrawValueAboveBar(true);
+        allEventsBarChart.setPinchZoom(false);
+        allEventsBarChart.setDrawGridBackground(true);
+
+        //set graph description
+        BarDataSet barDataSet = new BarDataSet(barChartEntries, "Training per squad");
+
+        BarData barData = new BarData(barDataSet);
+        barData.setBarWidth(0.9f);
+        //TODO find better colors
+        //set colors and their labels
+        //TODO crashes if tapped repeatedly
+        //barDataSet.setColors(new int[]{ContextCompat.getColor(getActivity(), R.color.colorPrimary), ContextCompat.getColor(getActivity(), R.color.back1), ContextCompat.getColor(getActivity(), R.color.com_facebook_blue)});
+        barDataSet.setColors(new int[] { R.color.Red, R.color.Green, R.color.Yellow,
+                R.color.Brown, R.color.Pink, R.color.Blue},getActivity());
+        barDataSet.setStackLabels(new String[] {"Gym","Sail","Run","Walk","Ski","Hike"});
+        allEventsBarChart.setData(barData);
+
+        //get the set of keys from the hashmap and convert them to an array
+        Set<String> keys = squadWorkoutMap.keySet();
+        String[] names = keys.toArray(new String[keys.size()]);
+
+
+        XAxis xAxis = allEventsBarChart.getXAxis();
+        xAxis.setGranularity(1);
+
+        //used the given array of keys to set labels
+        xAxis.setValueFormatter(new XAxisValueFormatter(names));
+
+        //TODO maybe add hours value on the side? / minutes?
+        //redraw graph every time?
+        allEventsBarChart.invalidate();
     }
 }

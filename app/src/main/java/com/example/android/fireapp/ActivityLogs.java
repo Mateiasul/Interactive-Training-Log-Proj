@@ -13,6 +13,16 @@ public class ActivityLogs {
     private String activityTitle;
     private String docReference;
 
+    public String getUserSquad() {
+        return userSquad;
+    }
+
+    public void setUserSquad(String userSquad) {
+        this.userSquad = userSquad;
+    }
+
+    private String userSquad;
+
     public String getUserName() {
         return userName;
     }
@@ -93,7 +103,7 @@ public class ActivityLogs {
 
     public ActivityLogs(String activityTitle, String activityType,
                         Date activityDate, String activityTime,String activityDuration,
-                        int activityEffortLevel, String docReference, String userName) {
+                        int activityEffortLevel, String docReference, String userName,String userSquad) {
         this.activityTitle = activityTitle;
         this.activityType = activityType;
         this.activityDate = activityDate;
@@ -102,5 +112,6 @@ public class ActivityLogs {
         this.activityEffortLevel = activityEffortLevel;
         this.docReference = docReference;
         this.userName = userName;
+        this.userSquad = userSquad;
     }
 }

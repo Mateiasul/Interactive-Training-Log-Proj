@@ -11,6 +11,7 @@ public class XAxisValueFormatter implements IAxisValueFormatter {
     private String[] stringArrayList;
 
     public XAxisValueFormatter(String[] stringArrayList) {
+
         this.stringArrayList = stringArrayList;
     }
 
