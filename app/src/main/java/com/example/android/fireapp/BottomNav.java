@@ -28,9 +28,10 @@ public class BottomNav extends AppCompatActivity {
     private BottomNavigationView mBottomNav;
     private FrameLayout mFrameLayout;
     //private DashFragment dashFragment;
-    private ChallangesFragment challangesFragment;
+    private ChallengesFragment challengesFragment;
     private AccountFragment accountFragment;
     private TabbedDashFragment tabbedDashFragment;
+    private TabbedChallengeFragment tabbedChallengeFragment;
     //to be deleted
     private BlankFragment blankFragment;
 
@@ -53,6 +54,7 @@ public class BottomNav extends AppCompatActivity {
     @Override
     protected void onStart()
     {
+        //on activity start, if user doesn t exist, send to login page
         super.onStart();
         FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
         firebaseFirestore = FirebaseFirestore.getInstance();
@@ -61,6 +63,7 @@ public class BottomNav extends AppCompatActivity {
             toLoginActivity();
         }
         else{
+            //if data for the current user is inexistent send the user straight to the account setup activity
             userId = mAuth.getCurrentUser().getUid();
             firebaseFirestore.collection("Users").document(userId).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                 @Override
@@ -86,8 +89,9 @@ public class BottomNav extends AppCompatActivity {
         mFrameLayout = findViewById(R.id.frame_layout);
         mBottomNav = findViewById(R.id.main_nav_bar);
         //dashFragment = new DashFragment();
-        challangesFragment = new ChallangesFragment();
+        challengesFragment = new ChallengesFragment();
         tabbedDashFragment = new TabbedDashFragment();
+        tabbedChallengeFragment = new TabbedChallengeFragment();
 
         accountFragment = new AccountFragment();
         blankFragment = new BlankFragment();
@@ -101,6 +105,16 @@ public class BottomNav extends AppCompatActivity {
         logoutButton = findViewById(R.id.LogoutButton);
         mAuth = FirebaseAuth.getInstance();
         selectFragment(tabbedDashFragment,"Dashboard");
+        Intent myIntent = getIntent(); // gets the previously created intent
+        if(myIntent.hasExtra("Fragment"))
+        {
+            String initFragment = myIntent.getStringExtra("Fragment");
+            if(initFragment.equals("Challenges"))
+            {
+                selectFragment(tabbedChallengeFragment,"Challenges");
+            }
+        }
+
 
     /*    if (savedInstanceState == null) {
             getSupportFragmentManager()
@@ -119,7 +133,7 @@ public class BottomNav extends AppCompatActivity {
                         return  true;
 
                     case R.id.nav_challanges:
-                        selectFragment(challangesFragment,"Challenges");
+                        selectFragment(tabbedChallengeFragment,"Challenges");
                         return  true;
 
           /*          case R.id.nav_add:
@@ -202,7 +216,7 @@ public class BottomNav extends AppCompatActivity {
         return false;
     }
     private void toLoginActivity() {
-        Intent loginIntent = new Intent(BottomNav.this, LoginActivity.class);
+        Intent loginIntent = new Intent(BottomNav.this, AddWorkoutActivity.class);
         startActivity(loginIntent);
         finish();
     }

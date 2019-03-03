@@ -19,14 +19,14 @@ import com.example.android.fireapp.adapters.MyFragmentPagerAdapter;
 import java.util.List;
 import java.util.Vector;
 
-public class TabbedDashFragment extends Fragment implements ViewPager.OnPageChangeListener, TabHost.OnTabChangeListener {
+public class TabbedChallengeFragment extends Fragment implements ViewPager.OnPageChangeListener, TabHost.OnTabChangeListener {
 
     private ViewPager viewPager;
     private TabHost tabHost;
     private MyFragmentPagerAdapter myFragmentPagerAdapter;
     int i = 0;
     private View v;
-    private FloatingActionButton FAB_addActivity;
+    private FloatingActionButton FAB_addChallenge;
     private BottomNavigationView mBottomNav;
 
     @Nullable
@@ -36,8 +36,9 @@ public class TabbedDashFragment extends Fragment implements ViewPager.OnPageChan
         final View navBar = inflater.inflate(R.layout.activity_bottom_nav, container, false);
         mBottomNav = navBar.findViewById(R.id.main_nav_bar);
         mBottomNav.setVisibility(View.GONE);
-        FAB_addActivity = v.findViewById(R.id.fab_add_activity);
-        FAB_addActivity.setOnClickListener(new View.OnClickListener() {
+        FAB_addChallenge = v.findViewById(R.id.fab_add_activity);
+        FAB_addChallenge.hide();
+        FAB_addChallenge.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
      /*           AddFragment fragment = new AddFragment();
@@ -46,7 +47,7 @@ public class TabbedDashFragment extends Fragment implements ViewPager.OnPageChan
                 fragmentTransaction.replace(R.id.frame_layout, fragment);
                 fragmentTransaction.addToBackStack(null);
                 fragmentTransaction.commit();*/
-                Intent mainIntent = new Intent(getActivity(),AddWorkoutActivityMDC.class);
+                Intent mainIntent = new Intent(getActivity(),AddNewChallengeActivity.class);
                 startActivity(mainIntent);
 
             }
@@ -63,7 +64,7 @@ public class TabbedDashFragment extends Fragment implements ViewPager.OnPageChan
         tabHost = (TabHost) v.findViewById(R.id.tabhost);
         tabHost.setup();
 
-        String[] tabNames = {"My activities", "Overall Stats"};
+        String[] tabNames = {"All challenges", "My challenges"};
 
         for (int i = 0; i<tabNames.length; i++)
         {
@@ -80,8 +81,8 @@ public class TabbedDashFragment extends Fragment implements ViewPager.OnPageChan
     private void InitViewPager() {
         List<Fragment> fragmentList = new Vector<Fragment>();
 
-        fragmentList.add(new Fragment1());
-        fragmentList.add(new Fragment2());
+        fragmentList.add(new ChallengesFragment());
+        fragmentList.add(new MyChallengesFragment());
 
         this.myFragmentPagerAdapter = new MyFragmentPagerAdapter(
                 getChildFragmentManager(),fragmentList);

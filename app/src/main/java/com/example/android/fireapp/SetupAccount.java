@@ -9,6 +9,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -41,6 +42,8 @@ public class SetupAccount extends AppCompatActivity implements DialogDatePicker.
     private EditText mWeight;
     private Spinner heightsSpinner;
     private Spinner weightsSpinner;
+    private CheckBox coachCheckBox;
+    private Boolean isCoach;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -62,6 +65,7 @@ public class SetupAccount extends AppCompatActivity implements DialogDatePicker.
         heightsSpinner.setAdapter(adapterH);
         weightsSpinner.setAdapter(adapterW);
 
+        coachCheckBox = findViewById(R.id.isCoachCheckBox);
         mFirstName = findViewById(R.id.editText_firstName);
         mLastName = findViewById(R.id.editText_secondName);
         mSaveAccountButton = findViewById(R.id.buttonAccountSettup);
@@ -93,18 +97,15 @@ public class SetupAccount extends AppCompatActivity implements DialogDatePicker.
                         {
                             if (task.getResult().exists())
                             {
-                             /*   String firstName = task.getResult().getString("FirstName");
-                                String lastName = task.getResult().getString("LastName");
-                                String weight = task.getResult().getString("Weight");
-                                String height = task.getResult().getString("Height");
-                                String dateOfBirth = task.getResult().getString("DateOfBirth");*/
-
+                                //empty data could end in null pointer exception
                                 mFirstName.setText(task.getResult().getString("FirstName"));
                                 mLastName.setText(task.getResult().getString("LastName"));
                                 mWeight.setText(task.getResult().getString("Weight"));
                                 mHeight.setText(task.getResult().getString("Height"));
                                 dobPicker.setText(task.getResult().getString("DateOfBirth"));
                                 squadName.setText(task.getResult().getString("SquadName"));
+                                isCoach = Boolean.parseBoolean(task.getResult().getString("Coach"));
+                                coachCheckBox.setChecked(isCoach);
                             }
 
                         }
@@ -127,6 +128,7 @@ public class SetupAccount extends AppCompatActivity implements DialogDatePicker.
                 String user_weight = mWeight.getText().toString();
                 String weightSpinner = weightsSpinner.getSelectedItem().toString();
                 String heightSpinner = heightsSpinner.getSelectedItem().toString();
+                Boolean isCoach = coachCheckBox.isChecked();
                 user_height += heightSpinner;
                 user_weight += weightSpinner;
 
@@ -140,6 +142,7 @@ public class SetupAccount extends AppCompatActivity implements DialogDatePicker.
                     userMap.put("Height",user_height);
                     userMap.put("DateOfBirth",dateOfBirth);
                     userMap.put("SquadName",squad_name);
+                    userMap.put("Coach",isCoach.toString());
                     mFirebaseFirestore.collection("Users").document(userID).set(userMap)
                             .addOnCompleteListener(new OnCompleteListener<Void>() {
                                 @Override
@@ -166,6 +169,7 @@ public class SetupAccount extends AppCompatActivity implements DialogDatePicker.
     }
     private void SendToStart() {
         Intent mainIntent = new Intent(SetupAccount.this,BottomNav.class);
+        //mainIntent.putExtra("Coach",isCoach);
         startActivity(mainIntent);
         finish();
     }

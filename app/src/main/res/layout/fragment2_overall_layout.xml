@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:id="@+id/ChallangeLayout"
     android:layout_height="match_parent"
-    tools:context=".ChallangesFragment"
+    tools:context=".ChallengesFragment"
     android:layout_marginBottom="?attr/actionBarSize"
     android:layout_marginTop="?attr/actionBarSize">
 
@@ -23,7 +23,7 @@
                 android:id="@+id/chart2"
                 android:layout_width="match_parent"
                 android:layout_height="400dp"
-                android:layout_marginBottom="30dp"
+                android:layout_marginBottom="5dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
@@ -31,15 +31,37 @@
 
             </com.github.mikephil.charting.charts.BarChart>
 
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/squadsRecyclerView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal" />
+
             <com.github.mikephil.charting.charts.BarChart
                 android:id="@+id/chart1"
+                android:layout_width="match_parent"
+                android:layout_height="400dp"
+                android:layout_marginBottom="5dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+            </com.github.mikephil.charting.charts.BarChart>
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/usersRecyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal" />
+
+            <com.github.mikephil.charting.charts.BarChart
+                android:id="@+id/chart3"
                 android:layout_width="match_parent"
                 android:layout_height="400dp"
                 android:layout_marginBottom="30dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
-
             </com.github.mikephil.charting.charts.BarChart>
 
         </LinearLayout>

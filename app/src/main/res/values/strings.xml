@@ -56,6 +56,9 @@
     <string name="EditWorkoutUsername">Username</string>
     <string name="edit_workout">Edit workout</string>
     <string name="delete_wokout">delete</string>
+    <string name="coachCheckBox">Coach</string>
+    <string name="error_string">field required</string>
+    <string name="CompleteWorkoutScore">Score</string>
 
     AccountSettupDesc
 </resources>

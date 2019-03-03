@@ -75,6 +75,7 @@ public class ActivityLogs {
         return date_str;
     }
 
+
     public Date getActivityDateFormat() {
         return  activityDate;
     }

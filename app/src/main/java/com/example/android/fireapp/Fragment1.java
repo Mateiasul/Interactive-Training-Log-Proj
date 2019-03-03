@@ -24,6 +24,7 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -34,6 +35,8 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
+import bolts.Bolts;
 
 
 public class Fragment1 extends Fragment {
@@ -50,6 +53,8 @@ public class Fragment1 extends Fragment {
     private int selectedItem = -1;
     private CustomAdapter customAdapter;
     private String docID;
+    private String isCoach;
+    private Intent detailsIntent;
 
     @Nullable
     @Override
@@ -59,13 +64,113 @@ public class Fragment1 extends Fragment {
         mFireBaseAuth = mFireBaseAuth.getInstance();
         userID = mFireBaseAuth.getCurrentUser().getUid();
         mFirebaseFirestore = FirebaseFirestore.getInstance();
-
-
         logs = new ArrayList<ActivityLogs>();
         v = inflater.inflate(R.layout.fragment_dash1, container, false);
-
         customAdapter = new CustomAdapter();
         listView = v.findViewById(R.id.dashListView);
+
+
+
+        checkUserIsCoach(new Fragment1.IsCoachCallback(){
+            @Override
+            public void onCoachCallback(String coach)
+            {
+                if(Boolean.parseBoolean(coach))
+                {
+                    mFirebaseFirestore.collection("Events").get()
+                            .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                @Override
+                                public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                    if (task.isSuccessful())
+                                    {
+                                        if(!task.getResult().isEmpty())
+                                        {
+                                            for (QueryDocumentSnapshot document : task.getResult())
+                                            {
+                                                Log.d("EVS", document.getId() + " => " + document.getData());
+                                                String title = document.get("Training Title").toString();
+                                                Date date = (Date) document.get("Training Date");
+                                                String time = document.get("Training Time").toString();
+                                                String type = document.get("Training Type").toString();
+                                                String duration = document.get("Training Duration").toString();
+                                                String userName = document.get("User Name").toString();
+                                                String userSquad = document.get("User Squad").toString();
+                                                String docRef = document.getId();
+                                                //requires casting due to FireStore cloud storing the value as Number
+                                                //casting to Long  - which extends number
+                                                int effortLevel = ((Long) document.get("Effort Level")).intValue();
+                                                DateFormat df = new SimpleDateFormat("MM-dd-yyyy");
+
+                                                ActivityLogs log = new ActivityLogs(title, type, date,
+                                                        time,duration, effortLevel,docRef,userName,userSquad);
+                                                //map of all the logged activities
+                                                logs.add(log);
+                                                //try and retrieve doc id from EVENTS earlier so it can be passed on
+                                                //might need refactoring, not the best implementation - copied code
+                                            }
+                                            listView.setAdapter(customAdapter);
+                                        }
+                                        else
+                                        {
+                                            Log.d("EVS", "Error getting documents: ", task.getException());
+                                        }
+                                    }
+                                }
+                            });
+                }
+                else
+                {
+                    //retrieve all workouts from a particular user ordering them starting with the most recent one
+                    //TODO if no events
+                    mFirebaseFirestore.collection("Users").document(userID).collection("Events")
+                            .orderBy("Training Date", Query.Direction.DESCENDING)
+                            .get()
+                            .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                @Override
+                                public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                    if (task.isSuccessful()) {
+                                        //TODO if empty - done
+                                        //TODO orderby date desc - done
+                                        if (!task.getResult().isEmpty()) {
+                                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                                //for each document(workout) store its data
+                                                Log.d("EVS", document.getId() + " => " + document.getData());
+                                                String title = document.get("Training Title").toString();
+                                                Date date = (Date) document.get("Training Date");
+                                                String time = document.get("Training Time").toString();
+                                                String type = document.get("Training Type").toString();
+                                                String duration = document.get("Training Duration").toString();
+                                                String userName = document.get("User Name").toString();
+                                                String userSquad = document.get("User Squad").toString();
+                                                String docRef = document.getId();
+                                                //requires casting due to FireStore cloud storing the value as Number
+                                                //casting to Long  - which extends number
+                                                int effortLevel = ((Long) document.get("Effort Level")).intValue();
+                                                DateFormat df = new SimpleDateFormat("MM-dd-yyyy");
+
+                                                ActivityLogs log = new ActivityLogs(title, type, date,
+                                                        time,duration, effortLevel,docRef,userName,userSquad);
+                                                //map of all the logged activities
+                                                logs.add(log);
+                                                //try and retrieve doc id from EVENTS earlier so it can be passed on
+                                                //might need refactoring, not the best implementation - copied code
+                                                getEventsDocID1(log);
+                                            }
+                                            //set the adapter for the list view which basically acts as a bridge
+                                            //between the data and the view
+                                            //TODO - start using VIEWHOLDER for extra efficiency
+                                            listView.setAdapter(customAdapter);
+                                        } else {
+                                            Log.d("EVS", "Error getting documents: ", task.getException());
+                                        }
+                                    }
+                                }
+                            });
+                }
+
+            }
+        });
+
         listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
@@ -78,75 +183,87 @@ public class Fragment1 extends Fragment {
                 return true;
             }
         });
-
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                goToDetailedWorkoutActivity(i);
+                if(Boolean.parseBoolean(isCoach))
+                {
+                    goToDetailedWorkoutActivityCoach(i);
+                }
+                else
+                {
+                    goToDetailedWorkoutActivity(i);
+                }
             }
         });
 
-        //retrieve all workouts from a particular user ordering them starting with the most recent one
-        //TODO if no events
-        mFirebaseFirestore.collection("Users").document(userID).collection("Events")
-                .orderBy("Training Date", Query.Direction.DESCENDING)
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            //TODO if empty - done
-                            //TODO orderby date desc - done
-                            if (!task.getResult().isEmpty()) {
-                                for (QueryDocumentSnapshot document : task.getResult()) {
-                                    //for each document(workout) store its data
-                                    Log.d("EVS", document.getId() + " => " + document.getData());
-                                    String title = document.get("Training Title").toString();
-                                    Date date = (Date) document.get("Training Date");
-                                    String time = document.get("Training Time").toString();
-                                    String type = document.get("Training Type").toString();
-                                    String duration = document.get("Training Duration").toString();
-                                    String userName = document.get("User Name").toString();
-                                    String userSquad = document.get("User Squad").toString();
-                                    String docRef = document.getId();
-                                    //requires casting due to FireStore cloud storing the value as Number
-                                    //casting to Long  - which extends number
-                                    int effortLevel = ((Long) document.get("Effort Level")).intValue();
-                                    DateFormat df = new SimpleDateFormat("MM-dd-yyyy");
 
-                                    ActivityLogs log = new ActivityLogs(title, type, date,
-                                                                 time,duration, effortLevel,docRef,userName,userSquad);
-                                    //map of all the logged activities
-                                    logs.add(log);
-                                    //try and retrieve doc id from EVENTS earlier so it can be passed on
-                                    //might need refactoring, not the best implementation - copied code
-                                    getEventsDocID1(log);
-                                }
-                                //set the adapter for the list view which basically acts as a bridge
-                                //between the data and the view
-                                //TODO - start using VIEWHOLDER for extra efficiency
-                                listView.setAdapter(customAdapter);
-                            } else {
-                                Log.d("EVS", "Error getting documents: ", task.getException());
-                            }
-                        }
-                    }
-                });
+
+
+
         return v;
         //return fragments view
 
     }
 
+    private void checkUserIsCoach(final Fragment1.IsCoachCallback callback) {
+        mFirebaseFirestore.collection("Users").document(userID).get()
+                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        if(task.isSuccessful())
+                        {
+                            isCoach = task.getResult().getString("Coach");
+                        }
+                        callback.onCoachCallback(isCoach);
+                    }
+                });
+    }
+
+    //2 methods used because when the document ref is passed - if user is coach
+    //the reference will be from the EVENTS
+    //if not reference will be from user/events - need to know what reference should be used to retrieve data
+    //could be optimised by always sending both of them - needs thinking
     private void goToDetailedWorkoutActivity(int position) {
         ActivityLogs activityLog = (ActivityLogs)customAdapter.getItem(position);
         Intent intent = new Intent(getActivity(), DetailedWorkoutActivity.class);
         intent.putExtra("workoutDocRef",activityLog.getDocReference());
-        intent.putExtra("workoutEventsDocRef",docID);
+        //intent.putExtra("workoutEventsDocRef",docID);
         startActivity(intent);
+    }
+
+    //this could be merged together
+    private void goToDetailedWorkoutActivityCoach(int position) {
+        ActivityLogs activityLog = (ActivityLogs)customAdapter.getItem(position);
+        detailsIntent = new Intent(getActivity(), DetailedWorkoutActivity.class);
+        detailsIntent.putExtra("workoutEventsDocRef",activityLog.getDocReference());
+        detailsIntent.putExtra("isCoach",true);
+        startActivity(detailsIntent);
+
+
+
     }
 
 
 
+
+    private interface FirestoreCallback
+    {
+        //implementation for the Callback interface - used to check if a method completed
+        void onCallback(String documentID);
+    }
+
+    private interface IsCoachCallback
+    {
+        //implementation for the Callback interface - used to check if a method completed
+        void onCoachCallback(String coach);
+    }
+
+    private interface retrieveUserEventIDCallback
+    {
+        //implementation for the Callback interface - used to check if a method completed
+        void onUserEventIdCallback(String eventId);
+    }
  /*   @Override
     public void onResume() {
         super.onResume();
@@ -234,11 +351,7 @@ public class Fragment1 extends Fragment {
                 });
     }
 
-    private interface FirestoreCallback
-    {
-        //implementation for the Callback interface - used to check if a method completed
-        void onCallback(String documentID);
-    }
+
 
 
     private void getEventsDocID(ActivityLogs activityLog, final Fragment1.FirestoreCallback callback) {

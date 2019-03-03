@@ -16,7 +16,6 @@ public class ValueFormatter implements IValueFormatter {
     }
 
     @Override
-
     public String getFormattedValue(float value, Entry entry, int dataSetIndex, ViewPortHandler viewPortHandler) {
         return decimalFormat.format(value) + "$";
     }

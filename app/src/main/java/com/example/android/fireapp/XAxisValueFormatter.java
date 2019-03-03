@@ -14,9 +14,24 @@ public class XAxisValueFormatter implements IAxisValueFormatter {
 
         this.stringArrayList = stringArrayList;
     }
-
+/*
     @Override
     public String getFormattedValue(float value, AxisBase axis) {
-        return stringArrayList[(int)value];
+        //return stringArrayList[(int)value];
+        String val = null;
+        try {
+            return stringArrayList[(int)value];
+        } catch (IndexOutOfBoundsException e) {
+            axis.setGranularityEnabled(false);
+        }
+        return val;
+    }*/
+    @Override
+    public String getFormattedValue(float value, AxisBase axis) {
+        int intValue = (int) value;
+
+        if (stringArrayList.length > intValue && intValue >= 0) return stringArrayList[intValue];
+
+        return "";
     }
 }

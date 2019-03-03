@@ -1,4 +1,4 @@
-package com.example.android.fireapp;
+package com.example.android.fireapp.adapters;
 
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;

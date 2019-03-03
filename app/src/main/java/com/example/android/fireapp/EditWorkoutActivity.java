@@ -24,6 +24,8 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -54,6 +56,8 @@ public class EditWorkoutActivity extends AppCompatActivity implements DialogDate
     private Button saveWorkoutEditButtom;
     private Timestamp activityTimeStamp;
     private Map<String, Object> userTrainingMap;
+    private String docID;
+    private Date origDate;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,47 +75,12 @@ public class EditWorkoutActivity extends AppCompatActivity implements DialogDate
         mFireBaseAuth = mFireBaseAuth.getInstance();
         userID = mFireBaseAuth.getCurrentUser().getUid();
         mFirebaseFirestore = FirebaseFirestore.getInstance();
-
         Intent myIntent = getIntent(); // gets the previously created intent
         workoutDocRef = myIntent.getStringExtra("workoutDocRef");
+/*
         workoutEventsDocRef = myIntent.getStringExtra("workoutEventsDocRef");
+*/
 
-
-        //when a particular field is clicked
-        //display the specific dialog necessary to make a selection
-        dateTV.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                showDatePickerDialog(view);
-            }
-        });
-        typeTV.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                showEditDialog(view);
-            }
-        });
-
-        timeTV.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                showTimePickerDialog(view);
-            }
-        });
-
-
-        durationTV.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                openDurationSelectDialog();
-            }
-        });
-        effortLevelTV.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                openEffortLevelDialog();
-            }
-        });
 
 
 
@@ -142,6 +111,38 @@ public class EditWorkoutActivity extends AppCompatActivity implements DialogDate
             }
         });
 
+        //when a particular field is clicked
+        //display the specific dialog necessary to make a selection
+        dateTV.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showDatePickerDialog(view);
+            }
+        });
+        typeTV.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showEditDialog(view);
+            }
+        });
+        timeTV.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showTimePickerDialog(view);
+            }
+        });
+        durationTV.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                openDurationSelectDialog();
+            }
+        });
+        effortLevelTV.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                openEffortLevelDialog();
+            }
+        });
 
         //when the save button is clicked
         saveWorkoutEditButtom.setOnClickListener(new View.OnClickListener() {
@@ -176,7 +177,7 @@ public class EditWorkoutActivity extends AppCompatActivity implements DialogDate
                         userTrainingMap.put("User Squad",userSquad);
 
                     //pass the map through the query to update the existing workout
-                    mFirebaseFirestore.collection("Users").document(userID)
+                        mFirebaseFirestore.collection("Users").document(userID)
                             .collection("Events").document(workoutDocRef)
                             .update(userTrainingMap)
                             .addOnCompleteListener(new OnCompleteListener<Void>()
@@ -187,30 +188,6 @@ public class EditWorkoutActivity extends AppCompatActivity implements DialogDate
                                     if (task.isSuccessful())
                                     {
                                         Toast.makeText(EditWorkoutActivity.this, "Edit successful User", Toast.LENGTH_SHORT).show();
-                                      /*  mFirebaseFirestore.collection("Events").document(workoutDocRef)
-                                                .update(userTrainingMap).addOnCompleteListener(new OnCompleteListener<Void>()
-                                        {
-                                            @Override
-                                            public void onComplete(@NonNull Task<Void> task)
-                                            {
-                                                if (task.isSuccessful())
-                                                {
-                                                    Toast.makeText(EditWorkoutActivity.this, "Edit successful Events", Toast.LENGTH_SHORT).show();
-                                                }
-                                                else
-                                                {
-*//*
-                                                    Toast.makeText(EditWorkoutActivity.this, "edit error Events", Toast.LENGTH_SHORT).show();
-*//*
-                                                    String errorMessage = task.getException().getMessage();
-                                                    Toast.makeText(EditWorkoutActivity.this, "log unsuccessful  " + errorMessage, Toast.LENGTH_SHORT).show();
-
-                                                }
-                                                //once update attempted, finish activity
-                                                finish();
-                                            }
-
-                                        });*/
                                     }
                                     else
                                     {
@@ -220,25 +197,35 @@ public class EditWorkoutActivity extends AppCompatActivity implements DialogDate
                                 }
                             });
 
-                    mFirebaseFirestore.collection("Events").document(workoutEventsDocRef)
-                                .update(userTrainingMap).addOnCompleteListener(new OnCompleteListener<Void>()
-                    {
-                        @Override
-                        public void onComplete(@NonNull Task<Void> task)
-                        {
-                            if (task.isSuccessful())
-                            {
-                                Toast.makeText(EditWorkoutActivity.this, "Edit successful Events", Toast.LENGTH_SHORT).show();
-                            }
-                            else
-                            {
-                                Toast.makeText(EditWorkoutActivity.this, "edit error Events", Toast.LENGTH_SHORT).show();
-                            }
-                            //once update attempted, finish activity
-                            finish();
-                        }
 
-                    });
+                        //callback used to retrieve document id from the EVENTS table
+                        //once id retrieved update the specific document as per latest changes
+                        getEventsDocID(new RetrieveAllEventIDCallback() {
+                            @Override
+                            public void onAllEventIdCallback(String workoutEventsDocID) {
+                                mFirebaseFirestore.collection("Events").document(workoutEventsDocID)
+                                        .update(userTrainingMap).addOnCompleteListener(new OnCompleteListener<Void>()
+                                {
+                                    @Override
+                                    public void onComplete(@NonNull Task<Void> task)
+                                    {
+                                        if (task.isSuccessful())
+                                        {
+                                            Toast.makeText(EditWorkoutActivity.this, "Edit successful Events", Toast.LENGTH_SHORT).show();
+                                        }
+                                        else
+                                        {
+                                            Toast.makeText(EditWorkoutActivity.this, "edit error Events", Toast.LENGTH_SHORT).show();
+                                        }
+                                        //once update attempted, finish activity
+                                        finish();
+                                    }
+
+                                });
+                            }
+                        });
+
+
 
                     }
             }
@@ -246,8 +233,42 @@ public class EditWorkoutActivity extends AppCompatActivity implements DialogDate
 
     }
 
+    private void getEventsDocID(final RetrieveAllEventIDCallback retrieveAllEventIDCallback) {
+        //gets the selected workout and the callback variable
+        //compares the selected workout's date with all the dates from EVENTS and retrieve matchs
+        mFirebaseFirestore.collection("Events")
+                .whereEqualTo("Training Date",origDate)
+                .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful())
+                {
+                    //go through all the retrieved docs and store ID
+                    //should only be one as date is accurate to the second
+                    for(QueryDocumentSnapshot document : task.getResult())
+                    {
+                        docID = document.getId();
+                    }
+
+                }
+                //when query is completed and id retrieved call the callback method
+                retrieveAllEventIDCallback.onAllEventIdCallback(docID);
+            }
+        });
+    }
+
+    private interface RetrieveAllEventIDCallback
+    {
+        //implementation for the Callback interface - used to check if a method completed
+        void onAllEventIdCallback(String eventId);
+    }
+
+
+
+
     private String getFormatedDate(DocumentSnapshot document) {
         Date date = (Date) document.get("Training Date");
+        origDate = date;
         DateFormat df = new SimpleDateFormat("MM-dd-yyyy");
         activityTimeStamp = new Timestamp(date);
 

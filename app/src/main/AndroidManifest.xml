@@ -23,7 +23,7 @@
         <activity android:name=".StartActivity" />
         <activity android:name=".SetupAccount" />
         <activity android:name=".BottomNav" />
-        <activity android:name=".MainTabActivity" />
+        <activity android:name=".AddWorkoutActivityMDC" />
 
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
@@ -48,7 +48,9 @@
         <activity android:name=".AddWorkoutActivity" />
         <activity android:name=".testTab.Main2Activity_testListVIew" />
         <activity android:name=".DetailedWorkoutActivity" />
-        <activity android:name=".EditWorkoutActivity"></activity>
+        <activity android:name=".EditWorkoutActivity" />
+        <activity android:name=".AddNewChallengeActivity" />
+        <activity android:name=".ChallengeDetailsActivity"></activity>
     </application>
 
 </manifest>
