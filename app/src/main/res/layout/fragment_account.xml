@@ -1,10 +1,103 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".AccountFragment">
+    tools:context=".AccountFragment"
+    android:layout_marginBottom="?attr/actionBarSize"
+    android:layout_marginTop="?attr/actionBarSize">
 
     <!-- TODO: Update blank fragment layout -->
+
+    <android.support.v7.widget.CardView
+        android:id="@+id/cardView2"
+        android:layout_width="368dp"
+        android:layout_height="72dp"
+        android:layout_marginTop="8dp"
+        app:cardElevation="10dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <Button
+                android:id="@+id/completed_Challenges_btn"
+                style="@android:style/Widget.Material.Light.Button.Borderless.Colored"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:drawableRight="@drawable/baseline_fitness_center_black_24dp"
+                android:elevation="10dp"
+                android:gravity="left|center_vertical"
+                android:text="Completed challenges"
+                android:textColor="@color/back1"
+                android:textColorLink="@color/back1"
+                android:textSize="18sp" />
+        </LinearLayout>
+    </android.support.v7.widget.CardView>
+
+    <android.support.v7.widget.CardView
+        android:id="@+id/cardView"
+        android:layout_width="368dp"
+        android:layout_height="72dp"
+        android:layout_marginTop="16dp"
+        app:cardElevation="10dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/cardView2">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <Button
+                android:id="@+id/leaderBoardButton"
+                style="@android:style/Widget.Material.Light.Button.Borderless.Colored"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:drawableRight="@drawable/baseline_whatshot_black_24dp"
+                android:elevation="10dp"
+                android:gravity="left|center_vertical"
+                android:text="LeaderBoard"
+                android:textColor="@color/back1"
+                android:textColorLink="@color/back1"
+                android:textSize="18sp" />
+        </LinearLayout>
+    </android.support.v7.widget.CardView>
+
+
+    <android.support.v7.widget.CardView
+        android:layout_width="368dp"
+        android:layout_height="65dp"
+        android:layout_marginTop="16dp"
+        app:cardElevation="10dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/cardView">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <Button
+                android:id="@+id/heightWeightBtn"
+                style="@android:style/Widget.Material.Light.Button.Borderless.Colored"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:drawableRight="@drawable/baseline_whatshot_black_24dp"
+                android:elevation="10dp"
+                android:gravity="left|center_vertical"
+                android:text="Height&Weight"
+                android:textColor="@color/back1"
+                android:textColorLink="@color/back1"
+                android:textSize="18sp" />
+        </LinearLayout>
+    </android.support.v7.widget.CardView>
 
 </android.support.constraint.ConstraintLayout>

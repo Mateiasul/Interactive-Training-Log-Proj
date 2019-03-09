@@ -6,7 +6,7 @@
     android:orientation="vertical">
 
 
-    <com.example.android.fireapp.MyNumberPicker
+    <com.example.android.fireapp.DialogFragments.MyNumberPicker
         android:id="@+id/nPHour"
         max="23"
         min="0"
@@ -26,7 +26,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.0" />
 
-    <com.example.android.fireapp.MyNumberPicker
+    <com.example.android.fireapp.DialogFragments.MyNumberPicker
         android:id="@+id/nPMinutes"
         max="60"
         min="0"
@@ -48,7 +48,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.0" />
 
-    <com.example.android.fireapp.MyNumberPicker
+    <com.example.android.fireapp.DialogFragments.MyNumberPicker
         android:id="@+id/nPSeconds"
         max="60"
         min="0"

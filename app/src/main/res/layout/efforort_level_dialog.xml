@@ -7,7 +7,7 @@
     android:orientation="vertical">
 
 
-    <com.example.android.fireapp.MyNumberPicker
+    <com.example.android.fireapp.DialogFragments.MyNumberPicker
         android:id="@+id/effortLevelNumPicker"
         max="10"
         min="0"

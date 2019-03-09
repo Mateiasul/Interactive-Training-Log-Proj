@@ -4,18 +4,33 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:id="@+id/DashFrameLayout"
-    tools:context=".Fragment2"
-    android:layout_marginBottom="?attr/actionBarSize"
-    android:layout_marginTop="?attr/actionBarSize"
+    tools:context=".Dashboard.Fragment2"
+
     >
 
-    <ListView
-        android:id="@+id/dashListView"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:clickable="true"
-        android:longClickable="true"
-        android:focusable="true"
-        android:dividerHeight="10dp"></ListView>
+        android:orientation="vertical">
+
+
+        <ProgressBar
+            android:id="@+id/fragment1ProgressBar"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:indeterminate="true"
+            android:visibility="invisible" />
+
+        <ListView
+            android:id="@+id/dashListView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:clickable="true"
+            android:dividerHeight="10dp"
+            android:focusable="true"
+            android:longClickable="true"></ListView>
+
+    </LinearLayout>
 
 </LinearLayout>

@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:id="@+id/ChallangeLayout"
     android:layout_height="match_parent"
-    tools:context=".ChallengesFragment"
+    tools:context=".Challenges.ChallengesFragment"
     android:layout_marginBottom="?attr/actionBarSize"
     android:layout_marginTop="?attr/actionBarSize">
 

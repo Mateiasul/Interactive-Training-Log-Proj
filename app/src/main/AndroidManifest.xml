@@ -12,18 +12,17 @@
         android:screenOrientation="portrait"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".LoginActivity">
+        <activity android:name=".Activities.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".MainActivity" />
-        <activity android:name=".StartActivity" />
-        <activity android:name=".SetupAccount" />
-        <activity android:name=".BottomNav" />
-        <activity android:name=".AddWorkoutActivityMDC" />
+        <activity android:name=".Activities.SignUpActivity" />
+        <activity android:name=".Activities.SetupAccount" />
+        <activity android:name=".Activities.MainActivity" />
+        <activity android:name=".Dashboard.AddWorkoutActivityMDC" />
 
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
@@ -45,12 +44,16 @@
                 <data android:scheme="@string/fb_login_protocol_scheme" />
             </intent-filter>
         </activity>
-        <activity android:name=".AddWorkoutActivity" />
+        <activity android:name=".Dashboard.AddWorkoutActivity" />
         <activity android:name=".testTab.Main2Activity_testListVIew" />
-        <activity android:name=".DetailedWorkoutActivity" />
-        <activity android:name=".EditWorkoutActivity" />
-        <activity android:name=".AddNewChallengeActivity" />
-        <activity android:name=".ChallengeDetailsActivity"></activity>
+        <activity android:name=".Dashboard.DetailedWorkoutActivity" />
+        <activity android:name=".Dashboard.EditWorkoutActivity" />
+        <activity android:name=".Challenges.AddNewChallengeActivity" />
+        <activity android:name=".Challenges.ChallengeDetailsActivity" />
+        <activity android:name=".testTab.PopulateScript" />
+        <activity android:name=".Challenges.CompletedChallengesActivity" />
+        <activity android:name=".Challenges.LeaderBoardActivity" />
+        <activity android:name=".HeightWeightActivity"></activity>
     </application>
 
 </manifest>
