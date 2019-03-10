@@ -1,21 +1,18 @@
 package com.example.android.fireapp;
 
 import android.graphics.Color;
-import android.graphics.DashPathEffect;
-import android.graphics.Paint;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TextInputEditText;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.example.android.fireapp.Dashboard.AddWorkoutActivityMDC;
 import com.example.android.fireapp.DialogFragments.DialogDatePicker;
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.XAxis;
@@ -24,46 +21,39 @@ import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
-import com.github.mikephil.charting.utils.ViewPortHandler;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
-import com.jjoe64.graphview.DefaultLabelFormatter;
 import com.jjoe64.graphview.GraphView;
-import com.jjoe64.graphview.helper.DateAsXAxisLabelFormatter;
 import com.jjoe64.graphview.series.DataPoint;
 import com.jjoe64.graphview.series.LineGraphSeries;
 
 import java.text.DateFormat;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
-import java.util.concurrent.TimeUnit;
 
-public class HeightWeightActivity extends AppCompatActivity implements  DialogDatePicker.DatePickerDialogInput {
+public class HeightActivity extends AppCompatActivity implements  DialogDatePicker.DatePickerDialogInput {
     private FirebaseAuth mFireBaseAuth;
     private FirebaseFirestore mFirebaseFirestore;
     private String userID;
     private int userWeight;
     private int userHeight;
     private EditText weightInput;
-    private Button updateGraph;
+    private Button updateGraphButton;
     private TextInputEditText textInputEditTextDate;
-    private TextInputEditText textInputEditTextWeight;
+    private TextInputEditText textInputEditTextHeight;
     private Date currentDate;
     private Timestamp activityTimeStamp;
     private GraphView weightGraph;
@@ -78,19 +68,20 @@ public class HeightWeightActivity extends AppCompatActivity implements  DialogDa
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_height_weight);
+        setContentView(R.layout.activity_height);
         mFireBaseAuth = mFireBaseAuth.getInstance();
         mFirebaseFirestore = FirebaseFirestore.getInstance();
         arrayList = new ArrayList<>();
         userID = mFireBaseAuth.getCurrentUser().getUid();
-        weightInput = findViewById(R.id.weight_edit_textGraph);
-        updateGraph = findViewById(R.id.updateGraphWeight);
+        //weightInput = findViewById(R.id.height_edit_textGraph);
+        updateGraphButton = findViewById(R.id.updateGraphHeight);
         textInputEditTextDate = findViewById(R.id.date_edit_textGraph);
-        textInputEditTextWeight = findViewById(R.id.weight_edit_textGraph);
+        textInputEditTextHeight = findViewById(R.id.height_edit_textGraph);
+
 
         //set activity toolbar
         Toolbar toolbar = findViewById(R.id.toolbar);
-        toolbar.setTitle("Weight Stats");
+        toolbar.setTitle("Height Stats");
         setSupportActionBar(toolbar);
 
 
@@ -98,12 +89,12 @@ public class HeightWeightActivity extends AppCompatActivity implements  DialogDa
             @Override
             public void onUserDetailsCallback() {
                 //init first entry with user initial weight
-                linechart = findViewById(R.id.lineChart);
+                linechart = findViewById(R.id.lineChartHeight);
 
 
-                getExistingWeightDataPoints(new WeightDataRetrievedCallback() {
+                getExistingHeightDataPoints(new HeightDataRetrievedCallback() {
                     @Override
-                    public void onWeightDataRetrievedCallback() {
+                    public void onHeightDataRetrievedCallback() {
 
 
                        // String date_str = df.format(accountCreationDate);
@@ -127,7 +118,7 @@ public class HeightWeightActivity extends AppCompatActivity implements  DialogDa
                         xAxis.setValueFormatter(new XAxisValueFormatter(arrayList.toArray(new String[0])));
 
 
-                        LineDataSet lineDataSet = new LineDataSet(yValues, "Weight Data Set");
+                        LineDataSet lineDataSet = new LineDataSet(yValues, "Height Data Set");
                         lineDataSet.setLineWidth(5f);
                         lineDataSet.setFillAlpha(110);
                         lineDataSet.setCircleRadius(7f);
@@ -171,7 +162,7 @@ public class HeightWeightActivity extends AppCompatActivity implements  DialogDa
 //                }
 
 
-        updateGraph.setOnClickListener(new View.OnClickListener() {
+        updateGraphButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 boolean noErrors = true;
@@ -187,10 +178,10 @@ public class HeightWeightActivity extends AppCompatActivity implements  DialogDa
             }
             if(noErrors)
             {
-                int newWeight = 0;
-                newWeight = Integer.parseInt(textInputEditTextWeight.getText().toString());
+                int newHeight = 0;
+                newHeight = Integer.parseInt(textInputEditTextHeight.getText().toString());
                 String date_str = df.format(currentDate);
-                addEntry(newWeight);
+                addEntry(newHeight);
             }
 
 //                if(currentDate != null && newWeight >= 0)
@@ -214,8 +205,8 @@ public class HeightWeightActivity extends AppCompatActivity implements  DialogDa
 
     }
 
-    private void getExistingWeightDataPoints(final WeightDataRetrievedCallback callback) {
-        mFirebaseFirestore.collection("Users").document(userID).collection("Weight Data")
+    private void getExistingHeightDataPoints(final HeightDataRetrievedCallback callback) {
+        mFirebaseFirestore.collection("Users").document(userID).collection("Height Data")
                 .orderBy("xValue",Query.Direction.ASCENDING)
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -232,7 +223,7 @@ public class HeightWeightActivity extends AppCompatActivity implements  DialogDa
                             arrayList.add(date_str);
                             indexI++;
                         }
-                        callback.onWeightDataRetrievedCallback();
+                        callback.onHeightDataRetrievedCallback();
                     }
                 });
     }
@@ -254,7 +245,7 @@ public class HeightWeightActivity extends AppCompatActivity implements  DialogDa
     }
 
 
-    private void addEntry(int newWeight) {
+    private void addEntry(int newHeight) {
 
         String date_str = df.format(currentDate);
 
@@ -272,7 +263,7 @@ public class HeightWeightActivity extends AppCompatActivity implements  DialogDa
         ILineDataSet randomSet = data.getDataSetByIndex(randomDataSetIndex);
         float value = (float) (Math.random() * 50) + 50f * (randomDataSetIndex + 1);
 
-        data.addEntry(new Entry(randomSet.getEntryCount(), newWeight), randomDataSetIndex);
+        data.addEntry(new Entry(randomSet.getEntryCount(), newHeight), randomDataSetIndex);
         data.notifyDataChanged();
         XAxis xAxis = linechart.getXAxis();
         xAxis.setValueFormatter(new XAxisValueFormatter(arrayList.toArray(new String[0])));
@@ -289,18 +280,18 @@ public class HeightWeightActivity extends AppCompatActivity implements  DialogDa
 
         Map<String,Object> dataPoints = new HashMap<>();
         dataPoints.put("xValue",currentDate);
-        dataPoints.put("yValue",newWeight);
-        mFirebaseFirestore.collection("Users").document(userID).collection("Weight Data")
+        dataPoints.put("yValue",newHeight);
+        mFirebaseFirestore.collection("Users").document(userID).collection("Height Data")
                 .add(dataPoints).addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
             @Override
             public void onComplete(@NonNull Task<DocumentReference> task) {
                 if(task.isSuccessful())
                 {
-                    Toast.makeText(HeightWeightActivity.this, "Entry logged successful", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(HeightActivity.this, "Entry logged successful", Toast.LENGTH_SHORT).show();
                 }
                 else
                 {
-                    Toast.makeText(HeightWeightActivity.this, task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(HeightActivity.this, task.getException().getMessage(), Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -311,7 +302,7 @@ public class HeightWeightActivity extends AppCompatActivity implements  DialogDa
 
     public void showDatePickerDialog(View v) {
         DialogFragment newFragment = new DialogDatePicker();
-        ((DialogDatePicker) newFragment).setDatePickerDialogInput(HeightWeightActivity.this);
+        ((DialogDatePicker) newFragment).setDatePickerDialogInput(HeightActivity.this);
         newFragment.show(getSupportFragmentManager(), "datePicker");
     }
 
@@ -328,8 +319,8 @@ public class HeightWeightActivity extends AppCompatActivity implements  DialogDa
         void onUserDetailsCallback();
     }
 
-    public interface WeightDataRetrievedCallback{
-        void onWeightDataRetrievedCallback();
+    public interface HeightDataRetrievedCallback {
+        void onHeightDataRetrievedCallback();
     }
 
 }

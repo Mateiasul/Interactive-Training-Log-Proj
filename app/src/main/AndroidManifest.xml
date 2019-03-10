@@ -45,7 +45,6 @@
             </intent-filter>
         </activity>
         <activity android:name=".Dashboard.AddWorkoutActivity" />
-        <activity android:name=".testTab.Main2Activity_testListVIew" />
         <activity android:name=".Dashboard.DetailedWorkoutActivity" />
         <activity android:name=".Dashboard.EditWorkoutActivity" />
         <activity android:name=".Challenges.AddNewChallengeActivity" />
@@ -54,6 +53,7 @@
         <activity android:name=".Challenges.CompletedChallengesActivity" />
         <activity android:name=".Challenges.LeaderBoardActivity" />
         <activity android:name=".HeightWeightActivity"></activity>
+        <activity android:name=".HeightActivity"></activity>
     </application>
 
 </manifest>

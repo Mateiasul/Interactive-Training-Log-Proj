@@ -31,7 +31,7 @@
     <string name="timePickerDialog">Time</string>
     <string name="TypePickerDialog">Type</string>
     <string name="spinner_title_weight">Weight</string>
-    <string name="spinner_title_height">Weight</string>
+    <string name="spinner_title_height">Height</string>
     <string name="setupSquadName">Squad Name</string>
     <string name="textViewDuration">Duration</string>
     <string name="EffortLevel">Level of Effort</string>

@@ -25,6 +25,7 @@ public class AccountFragment extends Fragment {
     private Button button;
     private Button leaderBoardButton;
     private Button heightWeightBtn;
+    private Button heightBtn;
 
     private View view;
     @Override
@@ -53,8 +54,17 @@ public class AccountFragment extends Fragment {
         heightWeightBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent heightWeightIntent = new Intent(getActivity(),LeaderBoardActivity.class);
+                Intent heightWeightIntent = new Intent(getActivity(),HeightWeightActivity.class);
                 startActivity(heightWeightIntent);
+            }
+        });
+
+        heightBtn = view.findViewById(R.id.heightBtn);
+        heightBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent heightIntent = new Intent(getActivity(),HeightActivity.class);
+                startActivity(heightIntent);
             }
         });
         // Inflate the layout for this fragment

@@ -21,9 +21,11 @@ import com.example.android.fireapp.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -47,6 +49,7 @@ public class SetupAccount extends AppCompatActivity implements DialogDatePicker.
     private Spinner weightsSpinner;
     private CheckBox coachCheckBox;
     private Boolean isCoach;
+    private Date creationDate = null;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -103,11 +106,12 @@ public class SetupAccount extends AppCompatActivity implements DialogDatePicker.
                                 //empty data could end in null pointer exception
                                 mFirstName.setText(task.getResult().getString("FirstName"));
                                 mLastName.setText(task.getResult().getString("LastName"));
-                                mWeight.setText(task.getResult().getString("Weight"));
-                                mHeight.setText(task.getResult().getString("Height"));
+                                mWeight.setText(task.getResult().getLong("Weight").toString());
+                                mHeight.setText(task.getResult().getLong("Height").toString());
                                 dobPicker.setText(task.getResult().getString("DateOfBirth"));
                                 squadName.setText(task.getResult().getString("SquadName"));
                                 completedChallenges = task.getResult().getLong("Completed Challenges").intValue();
+                                creationDate = task.getResult().getDate("Account creation date");
                                 isCoach = Boolean.parseBoolean(task.getResult().getString("Coach"));
                                 coachCheckBox.setChecked(isCoach);
                             }
@@ -128,13 +132,40 @@ public class SetupAccount extends AppCompatActivity implements DialogDatePicker.
                 String first_name = mFirstName.getText().toString();
                 String last_name = mLastName.getText().toString();
                 String dateOfBirth = dobPicker.getText().toString();
-                String user_height = mHeight.getText().toString();
-                String user_weight = mWeight.getText().toString();
+//                String user_height = mHeight.getText().toString();
+//                String user_weight = mWeight.getText().toString();
+                int user_height = Integer.parseInt(mHeight.getText().toString());
+                int user_weight = Integer.parseInt(mWeight.getText().toString());
+
                 String weightSpinner = weightsSpinner.getSelectedItem().toString();
                 String heightSpinner = heightsSpinner.getSelectedItem().toString();
                 Boolean isCoach = coachCheckBox.isChecked();
-                user_height += heightSpinner;
-                user_weight += weightSpinner;
+//                user_height += heightSpinner;
+//                user_weight += weightSpinner;
+
+                //get current date - for account creation
+                //if no date field exists means new account get current date
+                //else keep the current existing date
+                Calendar calendar = Calendar.getInstance();
+                Date date;
+                if(creationDate == null)
+                {
+                    //if newly created account - make an initial entry to weightData
+                    date = calendar.getTime();
+                    Map<String, Object> dataWPointsMap = new HashMap<>();
+                    dataWPointsMap.put("xValue",date);
+                    dataWPointsMap.put("yValue",user_weight);
+                    saveInitialWeightDataPoint(dataWPointsMap, userID);
+
+                    Map<String, Object> dataHPointsMap = new HashMap<>();
+                    dataHPointsMap.put("xValue",date);
+                    dataHPointsMap.put("yValue",user_height);
+                    saveInitialHeightDataPoint(dataHPointsMap,userID);
+                }
+                else
+                {
+                    date = creationDate;
+                }
 
                 String squad_name = squadName.getText().toString();
                 if(!first_name.isEmpty() && !last_name.isEmpty())
@@ -144,10 +175,13 @@ public class SetupAccount extends AppCompatActivity implements DialogDatePicker.
                     userMap.put("LastName",last_name);
                     userMap.put("Weight",user_weight);
                     userMap.put("Height",user_height);
+                    userMap.put("Weight unit",weightSpinner);
+                    userMap.put("Height unit",heightSpinner);
                     userMap.put("DateOfBirth",dateOfBirth);
                     userMap.put("SquadName",squad_name);
                     userMap.put("Coach",isCoach.toString());
                     userMap.put("Completed Challenges",completedChallenges);
+                    userMap.put("Account creation date",date);
 
                     mFirebaseFirestore.collection("Users").document(userID).set(userMap)
                             .addOnCompleteListener(new OnCompleteListener<Void>() {
@@ -165,6 +199,8 @@ public class SetupAccount extends AppCompatActivity implements DialogDatePicker.
                                     }
                                 }
                             });
+
+
                 }
                 SendToStart();
             }
@@ -173,6 +209,41 @@ public class SetupAccount extends AppCompatActivity implements DialogDatePicker.
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle("Account Setup");
     }
+
+    private void saveInitialWeightDataPoint(Map<String, Object> dataPointsMap, String userID) {
+        mFirebaseFirestore.collection("Users").document(userID).collection("Weight Data").add(dataPointsMap).addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentReference> task) {
+                if(task.isSuccessful())
+                {
+                    Toast.makeText(SetupAccount.this, "datapoint created successfully", Toast.LENGTH_SHORT).show();
+                }
+                else
+                {
+                    Toast.makeText(SetupAccount.this, task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+
+                }
+            }
+        });
+    }
+    private void saveInitialHeightDataPoint(Map<String, Object> dataPointsMap, String userID) {
+        mFirebaseFirestore.collection("Users").document(userID).collection("Height Data").add(dataPointsMap).addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentReference> task) {
+                if(task.isSuccessful())
+                {
+                    Toast.makeText(SetupAccount.this, "datapoint created successfully", Toast.LENGTH_SHORT).show();
+                }
+                else
+                {
+                    Toast.makeText(SetupAccount.this, task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+
+                }
+            }
+        });
+    }
+
+
     private void SendToStart() {
         Intent mainIntent = new Intent(SetupAccount.this,MainActivity.class);
         //mainIntent.putExtra("Coach",isCoach);

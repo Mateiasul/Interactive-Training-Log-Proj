@@ -9,7 +9,7 @@
         android:id="@+id/toolbar"
         />
     <com.github.mikephil.charting.charts.LineChart
-        android:id="@+id/lineChart"
+        android:id="@+id/lineChartHeight"
         android:layout_width="382dp"
         android:layout_height="322dp"
         android:layout_alignParentTop="true"
@@ -57,7 +57,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        android:id="@+id/updateGraphWeight"
+        android:id="@+id/updateGraphHeight"
         style="@android:style/Widget.Holo.Light.Button.Toggle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -71,7 +71,7 @@
 
 
     <android.support.design.widget.TextInputLayout
-        android:id="@+id/weight_text_inputGraph"
+        android:id="@+id/height_text_inputGraph"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -84,13 +84,13 @@
         app:layout_constraintStart_toStartOf="parent">
 
         <android.support.design.widget.TextInputEditText
-            android:id="@+id/weight_edit_textGraph"
+            android:id="@+id/height_edit_textGraph"
             android:layout_width="155dp"
             android:layout_height="wrap_content"
             android:drawableLeft="@drawable/baseline_fitness_center_black_24dp"
             android:drawablePadding="4dp"
             android:inputType="number"
-            android:hint="@string/spinner_title_weight" />
+            android:hint="@string/spinner_title_height" />
     </android.support.design.widget.TextInputLayout>
 
 </RelativeLayout>
